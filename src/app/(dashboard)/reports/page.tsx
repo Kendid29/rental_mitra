@@ -173,7 +173,7 @@ export default function ReportsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          {report && <LineAreaChart data={report.monthlyTrend} height={200} />}
+          {report && <LineAreaChart data={report.monthlyTrend} height={260} />}
         </CardContent>
       </Card>
 

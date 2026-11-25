@@ -297,10 +297,9 @@ export default function DashboardPage() {
           <Card className="lg:col-span-2">
             <CardHeader>
               <div>
-                <CardTitle>Tren Finansial & Omzet 6 Bulan Terakhir</CardTitle>
+                <CardTitle>Tren Finansial Bulanan</CardTitle>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  Perbandingan pendapatan kotor sewa, profit bersih, dan
-                  pengeluaran
+                  Omzet kotor, beban pengeluaran, dan profit bersih bulanan
                 </p>
               </div>
               <Link href="/reports">
@@ -314,7 +313,7 @@ export default function DashboardPage() {
               </Link>
             </CardHeader>
             <CardContent>
-              <LineAreaChart data={monthlyTrendData} height={200} />
+              <LineAreaChart data={monthlyTrendData} height={260} />
             </CardContent>
           </Card>
         ) : (
