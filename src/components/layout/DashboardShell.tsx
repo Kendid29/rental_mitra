@@ -1,11 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
+import { PageTransition } from '@/components/motion/page-transition';
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col">
@@ -16,7 +19,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       <div className="lg:pl-64 flex flex-col min-h-screen transition-all duration-200">
         <Topbar onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
         <main className="flex-1 p-4 sm:p-5 lg:p-6 max-w-7xl w-full mx-auto space-y-4 sm:space-y-5">
-          {children}
+          <PageTransition key={pathname}>
+            {children}
+          </PageTransition>
         </main>
       </div>
     </div>

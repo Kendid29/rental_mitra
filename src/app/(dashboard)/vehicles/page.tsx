@@ -13,6 +13,7 @@ import { Select } from "@/components/ui/Select";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Card, CardContent } from "@/components/ui/Card";
 import { formatRupiah } from "@/lib/format";
+import { StaggerContainer, StaggerItem } from "@/components/motion/reveal";
 import {
   Plus,
   Search,
@@ -237,9 +238,9 @@ export default function VehiclesPage() {
           </CardContent>
         </Card>
       ) : viewMode === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {vehicles.map((v) => (
-            <div
+            <StaggerItem
               key={v.id}
               className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden hover:border-slate-300 transition-colors flex flex-col group"
             >
@@ -353,14 +354,14 @@ export default function VehiclesPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       ) : (
         /* Table View */
         <Card>
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto" data-lenis-prevent>
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider font-heading">

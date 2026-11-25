@@ -75,7 +75,7 @@ export function DataTable<T extends { id?: string | number }>({
         className
       )}
     >
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" data-lenis-prevent>
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50/80 border-b border-slate-200/80">

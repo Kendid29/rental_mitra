@@ -232,7 +232,7 @@ export default function AvailabilityPage() {
               Tidak ada jadwal terblokir pada unit ini. Armada siap disewakan.
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto" data-lenis-prevent>
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider font-heading">

@@ -11,6 +11,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { LineAreaChart } from "@/components/charts/LineAreaChart";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { StaggerContainer, StaggerItem } from "@/components/motion/reveal";
 import { formatRupiah, formatDateShort, formatPhone } from "@/lib/format";
 import {
   Car,
@@ -188,76 +189,90 @@ export default function DashboardPage() {
       </div>
 
       {/* Primary Operational Metric Cards (4 columns) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <StatCard
-          title="Armada Siap Pakai"
-          value={metrics ? `${metrics.armada.tersedia} Unit` : "..."}
-          subtitle={`Total ${metrics?.armada.totalUnit || 0} unit armada`}
-          icon={<Car className="w-4 h-4 text-emerald-600" />}
-          iconBg="bg-emerald-50"
-        />
-        <StatCard
-          title="Sewa Aktif Berjalan"
-          value={metrics ? `${metrics.armada.disewa} Unit` : "..."}
-          subtitle={`${metrics?.pesanan.menungguPengembalian || 0} jadwal kembali`}
-          icon={<KeyRound className="w-4 h-4 text-[#0866F5]" />}
-          iconBg="bg-blue-50"
-        />
-        <StatCard
-          title="Menunggu Serah Terima"
-          value={metrics ? metrics.pesanan.menungguSerahTerima : "..."}
-          subtitle="Jadwal penyerahan kunci"
-          icon={<Clock className="w-4 h-4 text-amber-600" />}
-          iconBg="bg-amber-50"
-        />
-        <StatCard
-          title="Unit Masuk Bengkel"
-          value={metrics ? `${metrics.armada.maintenance} Unit` : "..."}
-          subtitle="Sedang diservis/perbaikan"
-          icon={<Wrench className="w-4 h-4 text-[#FF4D4D]" />}
-          iconBg="bg-rose-50"
-        />
-      </div>
+      <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <StaggerItem>
+          <StatCard
+            title="Armada Siap Pakai"
+            value={metrics ? `${metrics.armada.tersedia} Unit` : "..."}
+            subtitle={`Total ${metrics?.armada.totalUnit || 0} unit armada`}
+            icon={<Car className="w-4 h-4 text-emerald-600" />}
+            iconBg="bg-emerald-50"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            title="Sewa Aktif Berjalan"
+            value={metrics ? `${metrics.armada.disewa} Unit` : "..."}
+            subtitle={`${metrics?.pesanan.menungguPengembalian || 0} jadwal kembali`}
+            icon={<KeyRound className="w-4 h-4 text-[#0866F5]" />}
+            iconBg="bg-blue-50"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            title="Menunggu Serah Terima"
+            value={metrics ? metrics.pesanan.menungguSerahTerima : "..."}
+            subtitle="Jadwal penyerahan kunci"
+            icon={<Clock className="w-4 h-4 text-amber-600" />}
+            iconBg="bg-amber-50"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            title="Unit Masuk Bengkel"
+            value={metrics ? `${metrics.armada.maintenance} Unit` : "..."}
+            subtitle="Sedang diservis/perbaikan"
+            icon={<Wrench className="w-4 h-4 text-[#FF4D4D]" />}
+            iconBg="bg-rose-50"
+          />
+        </StaggerItem>
+      </StaggerContainer>
 
       {/* Financial Metrics (Only visible to MITRA_OWNER) */}
       {isOwner && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-          <StatCard
-            title="Pendapatan Sewa (Bulan Ini)"
-            value={
-              metrics
-                ? formatRupiah(metrics.keuangan.pendapatanBulanIni)
-                : "..."
-            }
-            subtitle="Total bruto transaksi"
-            trend={{ value: "+14.2%", isPositive: true, label: "vs lalu" }}
-            icon={<TrendingUp className="w-4 h-4 text-emerald-600" />}
-            iconBg="bg-emerald-50"
-          />
-          <StatCard
-            title="Pengeluaran Operasional"
-            value={
-              metrics
-                ? formatRupiah(metrics.keuangan.pengeluaranBulanIni)
-                : "..."
-            }
-            subtitle="Servis, BBM & kebutuhan"
-            trend={{ value: "-5.1%", isPositive: true, label: "efisiensi" }}
-            icon={<TrendingUp className="w-4 h-4 text-rose-600" />}
-            iconBg="bg-rose-50"
-          />
-          <StatCard
-            title="Saldo Reimburse Menunggu"
-            value={
-              metrics
-                ? formatRupiah(metrics.keuangan.saldoReimburseMenunggu)
-                : "..."
-            }
-            subtitle="Menunggu transfer admin"
-            icon={<Building2 className="w-4 h-4 text-[#0866F5]" />}
-            iconBg="bg-blue-50"
-          />
-        </div>
+        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <StaggerItem>
+            <StatCard
+              title="Pendapatan Sewa (Bulan Ini)"
+              value={
+                metrics
+                  ? formatRupiah(metrics.keuangan.pendapatanBulanIni)
+                  : "..."
+              }
+              subtitle="Total bruto transaksi"
+              trend={{ value: "+14.2%", isPositive: true, label: "vs lalu" }}
+              icon={<TrendingUp className="w-4 h-4 text-emerald-600" />}
+              iconBg="bg-emerald-50"
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <StatCard
+              title="Pengeluaran Operasional"
+              value={
+                metrics
+                  ? formatRupiah(metrics.keuangan.pengeluaranBulanIni)
+                  : "..."
+              }
+              subtitle="Servis, BBM & kebutuhan"
+              trend={{ value: "-5.1%", isPositive: true, label: "efisiensi" }}
+              icon={<TrendingUp className="w-4 h-4 text-rose-600" />}
+              iconBg="bg-rose-50"
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <StatCard
+              title="Saldo Reimburse Menunggu"
+              value={
+                metrics
+                  ? formatRupiah(metrics.keuangan.saldoReimburseMenunggu)
+                  : "..."
+              }
+              subtitle="Menunggu transfer admin"
+              icon={<Building2 className="w-4 h-4 text-[#0866F5]" />}
+              iconBg="bg-blue-50"
+            />
+          </StaggerItem>
+        </StaggerContainer>
       )}
 
       {/* Operational Attention Required Banner */}
@@ -468,7 +483,7 @@ export default function DashboardPage() {
           </Link>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" data-lenis-prevent>
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] text-slate-500 font-bold uppercase tracking-wider font-heading">

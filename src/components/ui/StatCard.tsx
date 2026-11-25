@@ -31,7 +31,7 @@ export function StatCard({
   return (
     <div
       className={cn(
-        'bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between transition-all duration-150 hover:border-slate-300',
+        'bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between transition-all duration-200 hover:border-slate-300 hover:shadow-sm hover:-translate-y-0.5',
         className
       )}
     >

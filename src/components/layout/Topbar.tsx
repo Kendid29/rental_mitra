@@ -3,9 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/api';
 import { NotificationItem, PartnerBusiness } from '@/types';
+import { dropdownVariants } from '@/lib/motion/variants';
 import {
   Menu,
   Bell,
@@ -154,43 +156,51 @@ export function Topbar({ onMenuToggle }: TopbarProps) {
           </button>
 
           {/* Partner Switcher Popover */}
-          {isPartnerMenuOpen && (
-            <div className="absolute right-0 mt-1.5 w-68 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
-              <div className="px-3.5 py-2 border-b border-slate-100">
-                <p className="text-xs font-bold text-slate-800 font-heading">Ganti Akun Mitra</p>
-                <p className="text-[11px] text-slate-400">Pilih tenant rental kendaraan</p>
-              </div>
-              <div className="max-h-60 overflow-y-auto py-1">
-                {partnersList.map((p) => {
-                  const isCurrent = partner?.id === p.id;
-                  return (
-                    <button
-                      key={p.id}
-                      onClick={() => {
-                        switchPartner(p.id);
-                        setIsPartnerMenuOpen(false);
-                      }}
-                      className="w-full px-3.5 py-2 text-left flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer"
-                    >
-                      <div className="truncate pr-2">
-                        <p
-                          className={`text-xs font-semibold truncate ${
-                            isCurrent ? 'text-[#0866F5]' : 'text-slate-800'
-                          }`}
-                        >
-                          {p.name}
-                        </p>
-                        <p className="text-[11px] text-slate-400 truncate">
-                          {p.city}
-                        </p>
-                      </div>
-                      {isCurrent && <CheckCircle2 className="w-4 h-4 text-[#0866F5] shrink-0" />}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+          <AnimatePresence>
+            {isPartnerMenuOpen && (
+              <motion.div
+                variants={dropdownVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="absolute right-0 mt-1.5 w-68 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-50 origin-top-right"
+              >
+                <div className="px-3.5 py-2 border-b border-slate-100">
+                  <p className="text-xs font-bold text-slate-800 font-heading">Ganti Akun Mitra</p>
+                  <p className="text-[11px] text-slate-400">Pilih tenant rental kendaraan</p>
+                </div>
+                <div data-lenis-prevent className="max-h-60 overflow-y-auto py-1">
+                  {partnersList.map((p) => {
+                    const isCurrent = partner?.id === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => {
+                          switchPartner(p.id);
+                          setIsPartnerMenuOpen(false);
+                        }}
+                        className="w-full px-3.5 py-2 text-left flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer"
+                      >
+                        <div className="truncate pr-2">
+                          <p
+                            className={`text-xs font-semibold truncate ${
+                              isCurrent ? 'text-[#0866F5]' : 'text-slate-800'
+                            }`}
+                          >
+                            {p.name}
+                          </p>
+                          <p className="text-[11px] text-slate-400 truncate">
+                            {p.city}
+                          </p>
+                        </div>
+                        {isCurrent && <CheckCircle2 className="w-4 h-4 text-[#0866F5] shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Role Switcher Pill (Owner vs Staff) */}
@@ -232,64 +242,72 @@ export function Topbar({ onMenuToggle }: TopbarProps) {
             )}
           </button>
 
-          {isNotifOpen && (
-            <div className="absolute right-0 mt-1.5 w-80 sm:w-88 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100">
-              <div className="px-3.5 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-bold text-[#102447] font-heading">Notifikasi</h4>
-                  <p className="text-[10px] text-slate-400">
-                    {unreadCount > 0 ? `${unreadCount} belum dibaca` : 'Semua terbaca'}
-                  </p>
-                </div>
-                {unreadCount > 0 && (
-                  <button
-                    onClick={handleMarkAllRead}
-                    className="text-[10px] font-semibold text-[#0866F5] hover:underline cursor-pointer"
-                  >
-                    Tandai Semua Dibaca
-                  </button>
-                )}
-              </div>
-
-              <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
-                {notifications.length === 0 ? (
-                  <div className="p-6 text-center text-xs text-slate-400">Tidak ada notifikasi</div>
-                ) : (
-                  notifications.slice(0, 6).map((notif) => (
-                    <div
-                      key={notif.id}
-                      className={`p-3 text-xs transition-colors hover:bg-slate-50 ${
-                        !notif.isRead ? 'bg-blue-50/30' : ''
-                      }`}
+          <AnimatePresence>
+            {isNotifOpen && (
+              <motion.div
+                variants={dropdownVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="absolute right-0 mt-1.5 w-80 sm:w-88 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden z-50 origin-top-right"
+              >
+                <div className="px-3.5 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                  <div>
+                    <h4 className="text-xs font-bold text-[#102447] font-heading">Notifikasi</h4>
+                    <p className="text-[10px] text-slate-400">
+                      {unreadCount > 0 ? `${unreadCount} belum dibaca` : 'Semua terbaca'}
+                    </p>
+                  </div>
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={handleMarkAllRead}
+                      className="text-[10px] font-semibold text-[#0866F5] hover:underline cursor-pointer"
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="font-semibold text-slate-800 text-xs">{notif.title}</p>
-                        {!notif.isRead && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#0866F5] shrink-0 mt-1" />
-                        )}
-                      </div>
-                      <p className="text-slate-500 text-[11px] mt-0.5 leading-relaxed">
-                        {notif.message}
-                      </p>
-                      <span className="text-[10px] text-slate-400 mt-1 block">
-                        {formatDateTimeIndo(notif.createdAt)}
-                      </span>
-                    </div>
-                  ))
-                )}
-              </div>
+                      Tandai Semua Dibaca
+                    </button>
+                  )}
+                </div>
 
-              <div className="p-2 border-t border-slate-100 bg-slate-50/50 text-center">
-                <Link
-                  href="/notifications"
-                  onClick={() => setIsNotifOpen(false)}
-                  className="text-xs font-semibold text-[#0866F5] hover:underline block py-0.5"
-                >
-                  Lihat Semua Notifikasi
-                </Link>
-              </div>
-            </div>
-          )}
+                <div data-lenis-prevent className="max-h-72 overflow-y-auto divide-y divide-slate-100">
+                  {notifications.length === 0 ? (
+                    <div className="p-6 text-center text-xs text-slate-400">Tidak ada notifikasi</div>
+                  ) : (
+                    notifications.slice(0, 6).map((notif) => (
+                      <div
+                        key={notif.id}
+                        className={`p-3 text-xs transition-colors hover:bg-slate-50 ${
+                          !notif.isRead ? 'bg-blue-50/30' : ''
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="font-semibold text-slate-800 text-xs">{notif.title}</p>
+                          {!notif.isRead && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#0866F5] shrink-0 mt-1" />
+                          )}
+                        </div>
+                        <p className="text-slate-500 text-[11px] mt-0.5 leading-relaxed">
+                          {notif.message}
+                        </p>
+                        <span className="text-[10px] text-slate-400 mt-1 block">
+                          {formatDateTimeIndo(notif.createdAt)}
+                        </span>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <div className="p-2 border-t border-slate-100 bg-slate-50/50 text-center">
+                  <Link
+                    href="/notifications"
+                    onClick={() => setIsNotifOpen(false)}
+                    className="text-xs font-semibold text-[#0866F5] hover:underline block py-0.5"
+                  >
+                    Lihat Semua Notifikasi
+                  </Link>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* User Profile Dropdown */}
@@ -309,51 +327,59 @@ export function Topbar({ onMenuToggle }: TopbarProps) {
             <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
           </button>
 
-          {isUserMenuOpen && (
-            <div className="absolute right-0 mt-1.5 w-52 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
-              <div className="px-3.5 py-2 border-b border-slate-100">
-                <p className="text-xs font-bold text-slate-800 truncate">{user?.name}</p>
-                <p className="text-[10px] text-slate-400 truncate">{user?.email}</p>
-                <div className="mt-1">
-                  <span className="inline-block px-1.5 py-0.2 text-[9px] font-bold rounded bg-blue-50 text-[#0866F5] border border-blue-100 uppercase tracking-wide">
-                    {user?.role === 'MITRA_OWNER' ? 'Owner (Full)' : 'Staff (Operasional)'}
-                  </span>
+          <AnimatePresence>
+            {isUserMenuOpen && (
+              <motion.div
+                variants={dropdownVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="absolute right-0 mt-1.5 w-52 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-50 origin-top-right"
+              >
+                <div className="px-3.5 py-2 border-b border-slate-100">
+                  <p className="text-xs font-bold text-slate-800 truncate">{user?.name}</p>
+                  <p className="text-[10px] text-slate-400 truncate">{user?.email}</p>
+                  <div className="mt-1">
+                    <span className="inline-block px-1.5 py-0.2 text-[9px] font-bold rounded bg-blue-50 text-[#0866F5] border border-blue-100 uppercase tracking-wide">
+                      {user?.role === 'MITRA_OWNER' ? 'Owner (Full)' : 'Staff (Operasional)'}
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="py-1">
-                <Link
-                  href="/settings/account"
-                  onClick={() => setIsUserMenuOpen(false)}
-                  className="flex items-center gap-2 px-3.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
-                >
-                  <Settings className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Pengaturan Akun</span>
-                </Link>
-                <Link
-                  href="/settings/business"
-                  onClick={() => setIsUserMenuOpen(false)}
-                  className="flex items-center gap-2 px-3.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
-                >
-                  <Store className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Profil Bisnis</span>
-                </Link>
-              </div>
+                <div className="py-1">
+                  <Link
+                    href="/settings/account"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center gap-2 px-3.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
+                  >
+                    <Settings className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Pengaturan Akun</span>
+                  </Link>
+                  <Link
+                    href="/settings/business"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center gap-2 px-3.5 py-1.5 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
+                  >
+                    <Store className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Profil Bisnis</span>
+                  </Link>
+                </div>
 
-              <div className="pt-1 border-t border-slate-100">
-                <button
-                  onClick={() => {
-                    setIsUserMenuOpen(false);
-                    logout();
-                  }}
-                  className="w-full flex items-center gap-2 px-3.5 py-1.5 text-xs text-rose-600 hover:bg-rose-50 transition-colors text-left cursor-pointer"
-                >
-                  <LogOut className="w-3.5 h-3.5 text-rose-500" />
-                  <span>Keluar Akun</span>
-                </button>
-              </div>
-            </div>
-          )}
+                <div className="pt-1 border-t border-slate-100">
+                  <button
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      logout();
+                    }}
+                    className="w-full flex items-center gap-2 px-3.5 py-1.5 text-xs text-rose-600 hover:bg-rose-50 transition-colors text-left cursor-pointer"
+                  >
+                    <LogOut className="w-3.5 h-3.5 text-rose-500" />
+                    <span>Keluar Akun</span>
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </header>

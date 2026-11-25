@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 export function NumberTicker({
   value,
-  duration = 1000,
+  duration = 800,
   formatter,
   className,
 }: {
@@ -13,14 +13,29 @@ export function NumberTicker({
   formatter?: (val: number) => string;
   className?: string;
 }) {
-  const [displayValue, setDisplayValue] = useState<number>(0);
+  const [displayValue, setDisplayValue] = useState<number>(value);
+  const prevValueRef = useRef<number>(value);
 
   useEffect(() => {
+    // Respect prefers-reduced-motion
+    if (typeof window !== 'undefined') {
+      const prefersReducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+      if (prefersReducedMotion) {
+        setDisplayValue(value);
+        prevValueRef.current = value;
+        return;
+      }
+    }
+
     let startTime: number | null = null;
     let animationFrameId: number;
 
-    const startValue = 0;
+    const startValue = prevValueRef.current;
     const endValue = value;
+
+    if (startValue === endValue) return;
 
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
@@ -35,6 +50,7 @@ export function NumberTicker({
         animationFrameId = requestAnimationFrame(step);
       } else {
         setDisplayValue(endValue);
+        prevValueRef.current = endValue;
       }
     };
 

@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
+import { modalBackdropVariants, modalContentVariants } from '@/lib/motion/variants';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -37,8 +39,6 @@ export function Modal({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
   const maxWidths = {
     sm: 'max-w-sm',
     md: 'max-w-md',
@@ -50,47 +50,65 @@ export function Modal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity"
-        onClick={onClose}
-      />
-
-      {/* Modal Dialog */}
-      <div
-        className={cn(
-          'relative w-full bg-white rounded-xl shadow-lg border border-slate-200 z-10 my-6 overflow-hidden transform transition-all',
-          maxWidths[maxWidth]
-        )}
-      >
-        {/* Header */}
-        <div className="flex items-start justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50/50">
-          <div>
-            <h3 className="text-sm font-bold text-[#102447] font-heading tracking-tight">{title}</h3>
-            {description && (
-              <p className="text-[11px] text-slate-500 mt-0.5 leading-normal">{description}</p>
-            )}
-          </div>
-          <button
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          {/* Backdrop with smooth fade */}
+          <motion.div
+            variants={modalBackdropVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs cursor-pointer"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors ml-3 shrink-0"
-            title="Tutup"
+          />
+
+          {/* Modal Dialog with smooth entrance & exit */}
+          <motion.div
+            variants={modalContentVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={cn(
+              'relative w-full bg-white rounded-xl shadow-lg border border-slate-200 z-10 my-6 overflow-hidden',
+              maxWidths[maxWidth]
+            )}
+            onClick={(e) => e.stopPropagation()}
           >
-            <X className="w-4 h-4" />
-          </button>
+            {/* Header */}
+            <div className="flex items-start justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50/50">
+              <div>
+                <h3 className="text-sm font-bold text-[#102447] font-heading tracking-tight">{title}</h3>
+                {description && (
+                  <p className="text-[11px] text-slate-500 mt-0.5 leading-normal">{description}</p>
+                )}
+              </div>
+              <button
+                onClick={onClose}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors ml-3 shrink-0 cursor-pointer active:scale-95"
+                title="Tutup"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Content Body with data-lenis-prevent to preserve isolated native scrolling */}
+            <div
+              data-lenis-prevent
+              className="px-5 py-4 max-h-[75vh] overflow-y-auto custom-scrollbar text-xs"
+            >
+              {children}
+            </div>
+
+            {/* Footer */}
+            {footer && (
+              <div className="px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-end gap-2 flex-wrap">
+                {footer}
+              </div>
+            )}
+          </motion.div>
         </div>
-
-        {/* Content Body */}
-        <div className="px-5 py-4 max-h-[75vh] overflow-y-auto custom-scrollbar text-xs">{children}</div>
-
-        {/* Footer */}
-        {footer && (
-          <div className="px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-end gap-2 flex-wrap">
-            {footer}
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   );
 }

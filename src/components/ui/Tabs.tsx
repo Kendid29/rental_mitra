@@ -21,6 +21,7 @@ export function Tabs({
 }) {
   return (
     <div
+      data-lenis-prevent
       className={cn(
         'inline-flex items-center gap-1 p-1 bg-slate-100 rounded-lg border border-slate-200/60 overflow-x-auto no-scrollbar',
         className

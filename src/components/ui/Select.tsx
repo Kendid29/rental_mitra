@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useId, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { ChevronDown, Check } from 'lucide-react';
+import { dropdownVariants } from '@/lib/motion/variants';
 
 export interface SelectOption {
   value: string;
@@ -206,46 +208,53 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           </select>
 
           {/* Custom Popover Dropdown Menu */}
-          {isOpen && (
-            <div
-              role="listbox"
-              className="absolute z-50 mt-1 w-full bg-white border border-slate-200/90 rounded-xl shadow-xl shadow-slate-900/10 py-1 max-h-60 overflow-y-auto overscroll-contain animate-in fade-in-0 zoom-in-95 duration-100"
-            >
-              {options.length === 0 ? (
-                <div className="px-3 py-2 text-xs text-slate-400 text-center">
-                  Tidak ada pilihan tersedia
-                </div>
-              ) : (
-                options.map((opt) => {
-                  const isSelected = opt.value === currentValue;
-                  return (
-                    <div
-                      key={opt.value}
-                      role="option"
-                      aria-selected={isSelected}
-                      onClick={() => handleSelectOption(opt)}
-                      className={cn(
-                        'w-full px-3 py-2 text-xs font-medium cursor-pointer transition-colors flex items-center justify-between gap-2 select-none mx-auto',
-                        isSelected
-                          ? 'bg-blue-50 text-[#0866F5] font-semibold'
-                          : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900',
-                        opt.disabled && 'text-slate-300 cursor-not-allowed hover:bg-transparent hover:text-slate-300'
-                      )}
-                    >
-                      <div className="flex items-center gap-2 truncate">
-                        {opt.icon && <span className="shrink-0">{opt.icon}</span>}
-                        <span className="truncate">{opt.label}</span>
-                      </div>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                role="listbox"
+                variants={dropdownVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                data-lenis-prevent
+                className="absolute z-50 mt-1 w-full bg-white border border-slate-200/90 rounded-xl shadow-xl shadow-slate-900/10 py-1 max-h-60 overflow-y-auto overscroll-contain origin-top"
+              >
+                {options.length === 0 ? (
+                  <div className="px-3 py-2 text-xs text-slate-400 text-center">
+                    Tidak ada pilihan tersedia
+                  </div>
+                ) : (
+                  options.map((opt) => {
+                    const isSelected = opt.value === currentValue;
+                    return (
+                      <div
+                        key={opt.value}
+                        role="option"
+                        aria-selected={isSelected}
+                        onClick={() => handleSelectOption(opt)}
+                        className={cn(
+                          'w-full px-3 py-2 text-xs font-medium cursor-pointer transition-colors flex items-center justify-between gap-2 select-none mx-auto',
+                          isSelected
+                            ? 'bg-blue-50 text-[#0866F5] font-semibold'
+                            : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900',
+                          opt.disabled && 'text-slate-300 cursor-not-allowed hover:bg-transparent hover:text-slate-300'
+                        )}
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          {opt.icon && <span className="shrink-0">{opt.icon}</span>}
+                          <span className="truncate">{opt.label}</span>
+                        </div>
 
-                      {isSelected && (
-                        <Check className="w-3.5 h-3.5 text-[#0866F5] shrink-0" />
-                      )}
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          )}
+                        {isSelected && (
+                          <Check className="w-3.5 h-3.5 text-[#0866F5] shrink-0" />
+                        )}
+                      </div>
+                    );
+                  })
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {error && <p className="text-[11px] text-rose-500 mt-1 font-medium">{error}</p>}

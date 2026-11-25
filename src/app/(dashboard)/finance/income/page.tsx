@@ -156,7 +156,7 @@ export default function IncomeLedgerPage() {
               Belum ada transaksi rental yang berstatus selesai.
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto" data-lenis-prevent>
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] text-slate-500 font-bold uppercase tracking-wider font-heading">

@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext';
 import { usePermission } from '@/hooks/usePermission';
 import { api } from '@/api';
+import { modalBackdropVariants } from '@/lib/motion/variants';
 import {
   LayoutDashboard,
   Car,
@@ -139,12 +141,18 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
       {/* Mobile Backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 lg:hidden transition-opacity"
-          onClick={onClose}
-        />
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            variants={modalBackdropVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 lg:hidden cursor-pointer"
+            onClick={onClose}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Sidebar Container: Standardized 256px (w-64) */}
       <aside
@@ -205,7 +213,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         {/* Navigation List: Compact spacing and item height */}
-        <div className="flex-1 overflow-y-auto px-2.5 py-3 space-y-3.5 custom-scrollbar">
+        <div data-lenis-prevent className="flex-1 overflow-y-auto px-2.5 py-3 space-y-3.5 custom-scrollbar">
           {navigationSections.map((sec, sIdx) => (
             <div key={sIdx}>
               <div className="px-2 mb-1 text-[9px] font-bold uppercase tracking-wider text-slate-400/90 font-heading">

@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { DEMO_CREDENTIALS } from '@/lib/constants';
 import { ShieldCheck, Lock, Mail, Eye, EyeOff, ArrowRight, Building2 } from 'lucide-react';
+import { PageTransition } from '@/components/motion/page-transition';
+import { Reveal } from '@/components/motion/reveal';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -45,8 +47,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[#0d1d3a] flex flex-col items-center justify-center p-4 text-white selection:bg-[#0866F5] selection:text-white">
-      {/* Container */}
-      <div className="w-full max-w-md flex flex-col items-center my-6">
+      <PageTransition className="w-full max-w-md flex flex-col items-center my-6">
         {/* Brand Header */}
         <div className="flex flex-col items-center mb-6 text-center">
           <div className="w-10 h-10 rounded-xl bg-[#0866F5] flex items-center justify-center font-bold text-xl text-white mb-2.5 shadow-sm">
@@ -238,7 +239,7 @@ export default function LoginPage() {
         <p className="text-[11px] text-slate-400 mt-5 text-center">
           &copy; 2026 RentalinAja Platform • Portal Mitra Kendaraan
         </p>
-      </div>
+      </PageTransition>
     </div>
   );
 }

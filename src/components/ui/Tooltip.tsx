@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
+import { tooltipVariants } from '@/lib/motion/variants';
 
 export function Tooltip({
   content,
@@ -32,18 +34,24 @@ export function Tooltip({
       onBlur={() => setIsVisible(false)}
     >
       {children}
-      {isVisible && (
-        <div
-          role="tooltip"
-          className={cn(
-            'absolute z-50 px-2.5 py-1 text-[11px] font-medium text-white bg-slate-900/90 backdrop-blur-xs rounded-lg shadow-lg whitespace-nowrap pointer-events-none animate-in fade-in zoom-in-95 duration-150',
-            positionClasses[position],
-            className
-          )}
-        >
-          {content}
-        </div>
-      )}
+      <AnimatePresence>
+        {isVisible && (
+          <motion.div
+            role="tooltip"
+            variants={tooltipVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={cn(
+              'absolute z-50 px-2.5 py-1 text-[11px] font-medium text-white bg-slate-900/90 backdrop-blur-xs rounded-lg shadow-lg whitespace-nowrap pointer-events-none',
+              positionClasses[position],
+              className
+            )}
+          >
+            {content}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
