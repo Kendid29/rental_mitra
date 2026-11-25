@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useId, useMemo } from 'react';
+import React, { useState, useId, useMemo, useRef, useEffect } from 'react';
 import { formatRupiah } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
@@ -42,7 +42,7 @@ function formatRupiahCompact(val: number): string {
  */
 function getSmoothCurvePath(points: Point[], tension: number = 0.2): string {
   if (points.length === 0) return '';
-  if (points.length === 1) return `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+  if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
 
   let d = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
 
@@ -78,13 +78,42 @@ function getSmoothAreaPath(points: Point[], baselineY: number, tension: number =
 
 export function LineAreaChart({
   data,
-  height = 270,
+  height = 230,
 }: {
   data: ChartDataPoint[];
   height?: number;
 }) {
   const chartId = useId().replace(/:/g, '');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState<number>(800);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  // Measure container width dynamically to keep 1:1 pixel coordinate scaling
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const updateWidth = () => {
+      if (containerRef.current) {
+        const measured = containerRef.current.clientWidth;
+        if (measured > 0) {
+          setContainerWidth(measured);
+        }
+      }
+    };
+
+    updateWidth();
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0) {
+          setContainerWidth(Math.round(entry.contentRect.width));
+        }
+      }
+    });
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   // Toggleable series visibility state
   const [visibleSeries, setVisibleSeries] = useState({
@@ -103,21 +132,22 @@ export function LineAreaChart({
 
   if (!data || data.length === 0) {
     return (
-      <div className="h-56 flex items-center justify-center text-xs text-slate-400 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+      <div className="h-48 flex items-center justify-center text-xs text-slate-400 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
         Data grafik keuangan tidak tersedia
       </div>
     );
   }
 
-  // Dimensions & Padding
-  const width = 720;
-  const paddingLeft = 60;
-  const paddingRight = 20;
-  const paddingTop = 22;
-  const paddingBottom = 32;
+  // Dimensions & Padding (scaled to actual container pixels)
+  const width = Math.max(300, containerWidth);
+  const isMobile = width < 520;
+  const paddingLeft = isMobile ? 48 : 58;
+  const paddingRight = 16;
+  const paddingTop = 16;
+  const paddingBottom = 26;
 
-  const chartWidth = width - paddingLeft - paddingRight;
-  const chartHeight = height - paddingTop - paddingBottom;
+  const chartWidth = Math.max(10, width - paddingLeft - paddingRight);
+  const chartHeight = Math.max(10, height - paddingTop - paddingBottom);
   const baselineY = paddingTop + chartHeight;
 
   // Calculate maximum value rounded up to a clean multiple
@@ -163,25 +193,25 @@ export function LineAreaChart({
   // Y-axis grid tick levels: [0, 0.25, 0.5, 0.75, 1.0]
   const yTicks = [0, 0.25, 0.5, 0.75, 1];
 
-  // Tooltip position calculation
-  const tooltipLeftPercent = hoveredIndex !== null ? (getX(hoveredIndex) / width) * 100 : 0;
+  // Tooltip position calculation in exact pixels
+  const tooltipX = hoveredIndex !== null ? getX(hoveredIndex) : 0;
   let tooltipTransform = '-translate-x-1/2';
   if (hoveredIndex !== null) {
-    if (hoveredIndex === 0) tooltipTransform = 'translate-x-0';
-    else if (hoveredIndex === data.length - 1) tooltipTransform = '-translate-x-full';
+    if (tooltipX < 120) tooltipTransform = 'translate-x-0';
+    else if (tooltipX > width - 140) tooltipTransform = '-translate-x-full';
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full" ref={containerRef}>
       {/* Interactive Legend with Toggle Visibility */}
-      <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
-        <div className="flex items-center gap-2 sm:gap-2.5 text-xs flex-wrap">
+      <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-xs flex-wrap">
           {/* Pendapatan Kotor */}
           <button
             type="button"
             onClick={() => toggleSeries('revenue')}
             className={cn(
-              'inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium transition-all cursor-pointer border select-none',
+              'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-medium transition-all cursor-pointer border select-none',
               visibleSeries.revenue
                 ? 'bg-blue-50/70 border-blue-200/70 text-slate-800 shadow-2xs hover:bg-blue-100/60'
                 : 'bg-slate-50 border-slate-200/60 text-slate-400 opacity-60 hover:opacity-80'
@@ -190,7 +220,7 @@ export function LineAreaChart({
           >
             <span
               className={cn(
-                'w-2 h-2 rounded-full transition-colors',
+                'w-1.5 h-1.5 rounded-full transition-colors',
                 visibleSeries.revenue ? 'bg-[#0866F5]' : 'bg-slate-300'
               )}
             />
@@ -204,7 +234,7 @@ export function LineAreaChart({
             type="button"
             onClick={() => toggleSeries('profit')}
             className={cn(
-              'inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium transition-all cursor-pointer border select-none',
+              'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-medium transition-all cursor-pointer border select-none',
               visibleSeries.profit
                 ? 'bg-emerald-50/70 border-emerald-200/70 text-slate-800 shadow-2xs hover:bg-emerald-100/60'
                 : 'bg-slate-50 border-slate-200/60 text-slate-400 opacity-60 hover:opacity-80'
@@ -213,7 +243,7 @@ export function LineAreaChart({
           >
             <span
               className={cn(
-                'w-2 h-2 rounded-full transition-colors',
+                'w-1.5 h-1.5 rounded-full transition-colors',
                 visibleSeries.profit ? 'bg-[#00C48C]' : 'bg-slate-300'
               )}
             />
@@ -227,7 +257,7 @@ export function LineAreaChart({
             type="button"
             onClick={() => toggleSeries('expense')}
             className={cn(
-              'inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium transition-all cursor-pointer border select-none',
+              'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-medium transition-all cursor-pointer border select-none',
               visibleSeries.expense
                 ? 'bg-rose-50/70 border-rose-200/70 text-slate-800 shadow-2xs hover:bg-rose-100/60'
                 : 'bg-slate-50 border-slate-200/60 text-slate-400 opacity-60 hover:opacity-80'
@@ -236,7 +266,7 @@ export function LineAreaChart({
           >
             <span
               className={cn(
-                'w-2 h-2 rounded-full transition-colors',
+                'w-1.5 h-1.5 rounded-full transition-colors',
                 visibleSeries.expense ? 'bg-[#FF4D4D]' : 'bg-slate-300'
               )}
             />
@@ -251,23 +281,23 @@ export function LineAreaChart({
         </span>
       </div>
 
-      {/* Main Chart Area */}
-      <div className="relative w-full">
+      {/* Main Chart Area: Fixed height matching prop so it never balloons up */}
+      <div className="relative w-full overflow-visible" style={{ height: `${height}px` }}>
         <svg
           viewBox={`0 0 ${width} ${height}`}
-          className="w-full h-auto overflow-visible select-none"
-          preserveAspectRatio="none"
+          style={{ width: `${width}px`, height: `${height}px` }}
+          className="overflow-visible select-none block max-w-full"
         >
           <defs>
             {/* Subtle Gradient for Pendapatan Kotor */}
             <linearGradient id={`revGrad_${chartId}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#0866F5" stopOpacity="0.10" />
+              <stop offset="0%" stopColor="#0866F5" stopOpacity="0.09" />
               <stop offset="85%" stopColor="#0866F5" stopOpacity="0.00" />
             </linearGradient>
 
             {/* Subtle Gradient for Profit Bersih */}
             <linearGradient id={`profGrad_${chartId}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#00C48C" stopOpacity="0.05" />
+              <stop offset="0%" stopColor="#00C48C" stopOpacity="0.04" />
               <stop offset="85%" stopColor="#00C48C" stopOpacity="0.00" />
             </linearGradient>
           </defs>
@@ -278,7 +308,7 @@ export function LineAreaChart({
             const tickValue = niceMax * pct;
 
             return (
-              <g key={idx} className="transition-all duration-150">
+              <g key={idx}>
                 {/* Horizontal Grid Line */}
                 <line
                   x1={paddingLeft}
@@ -329,7 +359,7 @@ export function LineAreaChart({
               d={revenueCurve}
               fill="none"
               stroke="#0866F5"
-              strokeWidth="2.5"
+              strokeWidth="2.2"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="transition-all duration-300"
@@ -342,7 +372,7 @@ export function LineAreaChart({
               d={profitCurve}
               fill="none"
               stroke="#00C48C"
-              strokeWidth="2.2"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="transition-all duration-300"
@@ -355,7 +385,7 @@ export function LineAreaChart({
               d={expenseCurve}
               fill="none"
               stroke="#FF4D4D"
-              strokeWidth="2"
+              strokeWidth="1.8"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="transition-all duration-300"
@@ -394,7 +424,7 @@ export function LineAreaChart({
                         r="3.5"
                         fill="#FFFFFF"
                         stroke="#0866F5"
-                        strokeWidth="2.2"
+                        strokeWidth="2"
                       />
                     )}
 
@@ -415,7 +445,7 @@ export function LineAreaChart({
                       <circle
                         cx={x}
                         cy={expensePoints[i].y}
-                        r="3.5"
+                        r="3"
                         fill="#FFFFFF"
                         stroke="#FF4D4D"
                         strokeWidth="2"
@@ -427,7 +457,7 @@ export function LineAreaChart({
                 {/* X-Axis Month Label */}
                 <text
                   x={x}
-                  y={height - 8}
+                  y={height - 6}
                   textAnchor="middle"
                   fontSize="11"
                   fill={isHovered ? '#102447' : '#64748B'}
@@ -463,7 +493,7 @@ export function LineAreaChart({
         {hoveredIndex !== null && data[hoveredIndex] && (
           <div
             style={{
-              left: `${tooltipLeftPercent}%`,
+              left: `${tooltipX}px`,
               top: '4px',
             }}
             className={cn(
@@ -471,7 +501,7 @@ export function LineAreaChart({
               tooltipTransform
             )}
           >
-            <div className="bg-white/95 backdrop-blur-md text-slate-800 text-xs rounded-xl p-3 shadow-xl shadow-slate-900/10 border border-slate-200/90 min-w-[210px]">
+            <div className="bg-white/95 backdrop-blur-md text-slate-800 text-xs rounded-xl p-2.5 shadow-xl shadow-slate-900/10 border border-slate-200/90 min-w-[200px]">
               {/* Header: Month Title */}
               <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-100">
                 <span className="text-[11px] font-bold text-[#102447] font-heading uppercase tracking-wider">
@@ -481,12 +511,12 @@ export function LineAreaChart({
               </div>
 
               {/* Series Data Rows */}
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 {/* Pendapatan Kotor */}
                 {visibleSeries.revenue && (
                   <div className="flex items-center justify-between gap-3 text-xs">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#0866F5] shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#0866F5] shrink-0" />
                       <span className="text-slate-500 text-[11px]">Pendapatan Kotor</span>
                     </div>
                     <span className="font-bold text-slate-900 tabular-nums">
@@ -499,7 +529,7 @@ export function LineAreaChart({
                 {visibleSeries.profit && (
                   <div className="flex items-center justify-between gap-3 text-xs">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#00C48C] shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00C48C] shrink-0" />
                       <span className="text-slate-500 text-[11px]">Profit Bersih</span>
                     </div>
                     <span className="font-bold text-emerald-600 tabular-nums">
@@ -512,7 +542,7 @@ export function LineAreaChart({
                 {visibleSeries.expense && (
                   <div className="flex items-center justify-between gap-3 text-xs">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#FF4D4D] shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF4D4D] shrink-0" />
                       <span className="text-slate-500 text-[11px]">Pengeluaran</span>
                     </div>
                     <span className="font-bold text-rose-600 tabular-nums">
