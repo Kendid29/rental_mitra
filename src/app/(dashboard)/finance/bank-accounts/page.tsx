@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import { usePermission } from '@/hooks/usePermission';
-import { api } from '@/api';
-import { BankAccount } from '@/types';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Modal } from '@/components/ui/Modal';
-import { Input } from '@/components/ui/Input';
-import { Select } from '@/components/ui/Select';
-import { Switch } from '@/components/ui/Switch';
-import { maskAccountNumber } from '@/lib/format';
-import { BANK_OPTIONS } from '@/lib/constants';
-import { Building2, Plus, Star, Trash2, ShieldAlert } from 'lucide-react';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { usePermission } from "@/hooks/usePermission";
+import { api } from "@/api";
+import { BankAccount } from "@/types";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import { Modal } from "@/components/ui/Modal";
+import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
+import { Switch } from "@/components/ui/Switch";
+import { maskAccountNumber } from "@/lib/format";
+import { BANK_OPTIONS } from "@/lib/constants";
+import { Building2, Plus, Star, Trash2, ShieldAlert } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function BankAccountsPage() {
   const { partner } = useAuth();
@@ -27,9 +27,9 @@ export default function BankAccountsPage() {
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bankName, setBankName] = useState('BCA');
-  const [accountNumber, setAccountNumber] = useState('');
-  const [accountHolder, setAccountHolder] = useState('');
+  const [bankName, setBankName] = useState("BCA");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [accountHolder, setAccountHolder] = useState("");
   const [isPrimary, setIsPrimary] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -55,7 +55,7 @@ export default function BankAccountsPage() {
     if (!partner) return;
 
     if (!accountNumber || !accountHolder) {
-      toast.error('Nomor rekening dan nama pemilik wajib diisi');
+      toast.error("Nomor rekening dan nama pemilik wajib diisi");
       return;
     }
 
@@ -69,13 +69,13 @@ export default function BankAccountsPage() {
       });
 
       if (res.success) {
-        toast.success('Rekening bank berhasil ditambahkan');
+        toast.success("Rekening bank berhasil ditambahkan");
         setIsModalOpen(false);
-        setAccountNumber('');
-        setAccountHolder('');
+        setAccountNumber("");
+        setAccountHolder("");
         loadAccounts();
       } else {
-        toast.error(res.error?.message || 'Gagal menambahkan rekening');
+        toast.error(res.error?.message || "Gagal menambahkan rekening");
       }
     } finally {
       setIsSubmitting(false);
@@ -86,28 +86,30 @@ export default function BankAccountsPage() {
     if (!partner) return;
     const res = await api.bankAccounts.setPrimary(partner.id, accountId);
     if (res.success) {
-      toast.success('Rekening utama berhasil diperbarui');
+      toast.success("Rekening utama berhasil diperbarui");
       loadAccounts();
     } else {
-      toast.error('Gagal memperbarui rekening');
+      toast.error("Gagal memperbarui rekening");
     }
   };
 
   const handleDeleteAccount = async (accountId: string) => {
     if (accounts.length <= 1) {
-      toast.error('Tidak dapat menghapus rekening satu-satunya. Minimal harus ada 1 rekening penerima.');
+      toast.error(
+        "Tidak dapat menghapus rekening satu-satunya. Minimal harus ada 1 rekening penerima.",
+      );
       return;
     }
 
-    if (!confirm('Hapus rekening bank ini?')) return;
+    if (!confirm("Hapus rekening bank ini?")) return;
     if (!partner) return;
 
     const res = await api.bankAccounts.deleteBankAccount(partner.id, accountId);
     if (res.success) {
-      toast.success('Rekening berhasil dihapus');
+      toast.success("Rekening berhasil dihapus");
       loadAccounts();
     } else {
-      toast.error(res.error?.message || 'Gagal menghapus rekening');
+      toast.error(res.error?.message || "Gagal menghapus rekening");
     }
   };
 
@@ -115,9 +117,12 @@ export default function BankAccountsPage() {
     return (
       <Card className="p-8 text-center">
         <ShieldAlert className="w-10 h-10 text-rose-500 mx-auto mb-2" />
-        <h3 className="text-sm font-bold text-slate-900 font-heading">Akses Dibatasi</h3>
+        <h3 className="text-sm font-bold text-slate-900 font-heading">
+          Akses Dibatasi
+        </h3>
         <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-          Hanya Pemilik Bisnis (MITRA_OWNER) yang berhak mengatur rekening pencairan dana.
+          Hanya Pemilik Bisnis (MITRA_OWNER) yang berhak mengatur rekening
+          pencairan dana.
         </p>
       </Card>
     );
@@ -128,7 +133,7 @@ export default function BankAccountsPage() {
       <PageHeader
         title="Rekening Bank Penerima Reimburse"
         subtitle="Kelola rekening bank resmi tempat transfer pencairan pendapatan sewa dari Admin platform"
-        breadcrumbs={[{ label: 'Keuangan' }, { label: 'Rekening Bank' }]}
+        breadcrumbs={[{ label: "Keuangan" }, { label: "Rekening Bank" }]}
         actions={
           <Button
             variant="primary"
@@ -153,16 +158,16 @@ export default function BankAccountsPage() {
               key={acc.id}
               className={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white shadow-xs ${
                 acc.isPrimary
-                  ? 'border-blue-400/90 ring-1 ring-blue-400/20'
-                  : 'border-slate-200/80'
+                  ? "border-blue-400/90 ring-1 ring-blue-400/20"
+                  : "border-slate-200/80"
               }`}
             >
               <div className="flex items-start gap-3">
                 <div
                   className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 ${
                     acc.isPrimary
-                      ? 'bg-[#0866F5] text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-700'
+                      ? "bg-[#0866F5] text-white shadow-xs"
+                      : "bg-slate-100 text-slate-700"
                   }`}
                 >
                   <Building2 className="w-4 h-4" />
@@ -182,7 +187,10 @@ export default function BankAccountsPage() {
                     {maskAccountNumber(acc.accountNumber)}
                   </p>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    a/n <span className="font-medium text-slate-700">{acc.accountHolder}</span>
+                    a/n{" "}
+                    <span className="font-medium text-slate-700">
+                      {acc.accountHolder}
+                    </span>
                   </p>
                 </div>
               </div>
@@ -255,10 +263,20 @@ export default function BankAccountsPage() {
           />
 
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsModalOpen(false)}
+            >
               Batal
             </Button>
-            <Button type="submit" variant="primary" size="sm" isLoading={isSubmitting}>
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              isLoading={isSubmitting}
+            >
               Simpan Rekening
             </Button>
           </div>

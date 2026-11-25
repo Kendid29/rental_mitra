@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
-import { api } from '@/api';
-import { Booking } from '@/types';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { Button } from '@/components/ui/Button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
-import { formatDateIndo, formatPhone } from '@/lib/format';
-import { KeyRound, ArrowRight, Eye } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { api } from "@/api";
+import { Booking } from "@/types";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Button } from "@/components/ui/Button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { formatDateIndo, formatPhone } from "@/lib/format";
+import { KeyRound, ArrowRight, Eye } from "lucide-react";
 
 export default function HandoverListPage() {
   const { partner } = useAuth();
@@ -21,7 +21,7 @@ export default function HandoverListPage() {
     if (!partner) return;
     setIsLoading(true);
     api.bookings
-      .getBookings(partner.id, { status: 'diteruskan_mitra' })
+      .getBookings(partner.id, { status: "diteruskan_mitra" })
       .then((res) => {
         if (res.success && res.data) {
           setPendingBookings(res.data.items);
@@ -35,7 +35,7 @@ export default function HandoverListPage() {
       <PageHeader
         title="Serah Terima Kunci Kendaraan"
         subtitle="Daftar pesanan aktif yang siap diserahterimakan kepada penyewa hari ini"
-        breadcrumbs={[{ label: 'Serah Terima' }]}
+        breadcrumbs={[{ label: "Serah Terima" }]}
       />
 
       {/* Info Card */}
@@ -46,7 +46,9 @@ export default function HandoverListPage() {
         <div>
           <p className="font-bold">SOP Serah Terima RentalinAja:</p>
           <p className="text-blue-700 text-[11px] mt-0.5">
-            Periksa KTP/SIM fisik penyewa, catat KM & BBM aktual, serta dokumentasikan foto 4 sisi kendaraan bersama penyewa sebelum penyerahan kunci.
+            Periksa KTP/SIM fisik penyewa, catat KM & BBM aktual, serta
+            dokumentasikan foto 4 sisi kendaraan bersama penyewa sebelum
+            penyerahan kunci.
           </p>
         </div>
       </div>
@@ -67,7 +69,8 @@ export default function HandoverListPage() {
             </div>
           ) : pendingBookings.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-400">
-              Tidak ada serah terima yang tertunda. Semua unit yang diteruskan telah diserahkan.
+              Tidak ada serah terima yang tertunda. Semua unit yang diteruskan
+              telah diserahkan.
             </div>
           ) : (
             <div className="divide-y divide-slate-100">
@@ -86,27 +89,51 @@ export default function HandoverListPage() {
                           #{b.bookingNumber}
                         </span>
                         <Badge
-                          variant={b.readinessStatus === 'ready' ? 'emerald' : 'amber'}
+                          variant={
+                            b.readinessStatus === "ready" ? "emerald" : "amber"
+                          }
                           size="sm"
                         >
-                          {b.readinessStatus === 'ready' ? 'Unit Siap' : 'Perlu Cek'}
+                          {b.readinessStatus === "ready"
+                            ? "Unit Siap"
+                            : "Perlu Cek"}
                         </Badge>
                       </div>
                       <p className="text-xs font-semibold text-slate-800 mt-0.5 font-heading">
                         {b.vehicle.nama} ({b.vehicle.platNomor})
                       </p>
                       <p className="text-[11px] text-slate-500 mt-0.5">
-                        Penyewa: <span className="font-medium text-slate-700">{b.customer.nama}</span> ({formatPhone(b.customer.telepon || b.customer.phone || '')})
+                        Penyewa:{" "}
+                        <span className="font-medium text-slate-700">
+                          {b.customer.nama}
+                        </span>{" "}
+                        (
+                        {formatPhone(
+                          b.customer.telepon || b.customer.phone || "",
+                        )}
+                        )
                       </p>
                       <p className="text-[10px] text-slate-400">
-                        Jadwal: <span className="font-semibold text-blue-700">{formatDateIndo(b.tanggalMulai)}</span> ({b.durasiHari} Hari)
+                        Jadwal:{" "}
+                        <span className="font-semibold text-blue-700">
+                          {formatDateIndo(b.tanggalMulai)}
+                        </span>{" "}
+                        ({b.durasiHari} Hari)
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <Link href={`/bookings/${b.id}`} title="Lihat Detail Pesanan">
-                      <Button variant="outline" size="icon-sm" title="Lihat Detail" aria-label="Lihat Detail">
+                    <Link
+                      href={`/bookings/${b.id}`}
+                      title="Lihat Detail Pesanan"
+                    >
+                      <Button
+                        variant="outline"
+                        size="icon-sm"
+                        title="Lihat Detail"
+                        aria-label="Lihat Detail"
+                      >
                         <Eye className="w-3.5 h-3.5 text-slate-600" />
                       </Button>
                     </Link>

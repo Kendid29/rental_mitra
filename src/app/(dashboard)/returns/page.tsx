@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
-import { api } from '@/api';
-import { Booking } from '@/types';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { Button } from '@/components/ui/Button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
-import { formatDateIndo, formatPhone } from '@/lib/format';
-import { RotateCcw, ArrowRight, Eye } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { api } from "@/api";
+import { Booking } from "@/types";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Button } from "@/components/ui/Button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { formatDateIndo, formatPhone } from "@/lib/format";
+import { RotateCcw, ArrowRight, Eye } from "lucide-react";
 
 export default function ReturnsListPage() {
   const { partner } = useAuth();
@@ -21,7 +21,7 @@ export default function ReturnsListPage() {
     if (!partner) return;
     setIsLoading(true);
     api.bookings
-      .getBookings(partner.id, { status: 'berjalan' })
+      .getBookings(partner.id, { status: "berjalan" })
       .then((res) => {
         if (res.success && res.data) {
           setActiveRentals(res.data.items);
@@ -35,7 +35,7 @@ export default function ReturnsListPage() {
       <PageHeader
         title="Pengembalian & Inspeksi Armada"
         subtitle="Daftar kendaraan yang saat ini sedang disewa aktif dan menunggu pengembalian unit"
-        breadcrumbs={[{ label: 'Pengembalian' }]}
+        breadcrumbs={[{ label: "Pengembalian" }]}
       />
 
       {/* Info Banner */}
@@ -46,7 +46,9 @@ export default function ReturnsListPage() {
         <div>
           <p className="font-bold">SOP Pengembalian & Penutupan Sewa:</p>
           <p className="text-emerald-700 text-[11px] mt-0.5">
-            Lakukan inspeksi fisik teliti (bodi, interior, ban), bandingkan level BBM dan KM aktual, serta hitung penalti keterlambatan jika penyewa mengembalikan lewat dari jadwal.
+            Lakukan inspeksi fisik teliti (bodi, interior, ban), bandingkan
+            level BBM dan KM aktual, serta hitung penalti keterlambatan jika
+            penyewa mengembalikan lewat dari jadwal.
           </p>
         </div>
       </div>
@@ -66,7 +68,8 @@ export default function ReturnsListPage() {
             </div>
           ) : activeRentals.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-400">
-              Tidak ada unit yang sedang disewa saat ini. Seluruh armada berada di pool atau bengkel.
+              Tidak ada unit yang sedang disewa saat ini. Seluruh armada berada
+              di pool atau bengkel.
             </div>
           ) : (
             <div className="divide-y divide-slate-100">
@@ -92,17 +95,36 @@ export default function ReturnsListPage() {
                         {b.vehicle.nama} ({b.vehicle.platNomor})
                       </p>
                       <p className="text-[11px] text-slate-500 mt-0.5">
-                        Penyewa: <span className="font-medium text-slate-700">{b.customer.nama}</span> ({formatPhone(b.customer.telepon || b.customer.phone || '')})
+                        Penyewa:{" "}
+                        <span className="font-medium text-slate-700">
+                          {b.customer.nama}
+                        </span>{" "}
+                        (
+                        {formatPhone(
+                          b.customer.telepon || b.customer.phone || "",
+                        )}
+                        )
                       </p>
                       <p className="text-[10px] text-slate-400">
-                        Jatuh Tempo: <span className="font-semibold text-emerald-700">{formatDateIndo(b.tanggalSelesai)}</span>
+                        Jatuh Tempo:{" "}
+                        <span className="font-semibold text-emerald-700">
+                          {formatDateIndo(b.tanggalSelesai)}
+                        </span>
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <Link href={`/bookings/${b.id}`} title="Lihat Detail Pesanan">
-                      <Button variant="outline" size="icon-sm" title="Lihat Detail" aria-label="Lihat Detail">
+                    <Link
+                      href={`/bookings/${b.id}`}
+                      title="Lihat Detail Pesanan"
+                    >
+                      <Button
+                        variant="outline"
+                        size="icon-sm"
+                        title="Lihat Detail"
+                        aria-label="Lihat Detail"
+                      >
                         <Eye className="w-3.5 h-3.5 text-slate-600" />
                       </Button>
                     </Link>

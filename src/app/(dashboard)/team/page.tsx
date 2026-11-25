@@ -1,19 +1,25 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import { usePermission } from '@/hooks/usePermission';
-import { api } from '@/api';
-import { AuthUser } from '@/types';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
-import { Card, CardContent } from '@/components/ui/Card';
-import { Modal } from '@/components/ui/Modal';
-import { Input } from '@/components/ui/Input';
-import { Switch } from '@/components/ui/Switch';
-import { Plus, Trash2, ShieldCheck, ShieldAlert, CheckCircle2 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { usePermission } from "@/hooks/usePermission";
+import { api } from "@/api";
+import { AuthUser } from "@/types";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { Card, CardContent } from "@/components/ui/Card";
+import { Modal } from "@/components/ui/Modal";
+import { Input } from "@/components/ui/Input";
+import { Switch } from "@/components/ui/Switch";
+import {
+  Plus,
+  Trash2,
+  ShieldCheck,
+  ShieldAlert,
+  CheckCircle2,
+} from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function TeamPage() {
   const { partner, user } = useAuth();
@@ -24,9 +30,9 @@ export default function TeamPage() {
 
   // Add Member Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('password123');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("password123");
 
   // Permissions state
   const [pKendaraan, setPKendaraan] = useState(true);
@@ -58,7 +64,7 @@ export default function TeamPage() {
     if (!partner) return;
 
     if (!name || !email) {
-      toast.error('Nama dan email staf wajib diisi');
+      toast.error("Nama dan email staf wajib diisi");
       return;
     }
 
@@ -67,7 +73,7 @@ export default function TeamPage() {
       const res = await api.team.createTeamMember(partner.id, {
         email,
         name,
-        role: 'MITRA_STAFF',
+        role: "MITRA_STAFF",
         permissions: {
           kelolaKendaraan: pKendaraan,
           kelolaKetersediaan: pKetersediaan,
@@ -81,11 +87,11 @@ export default function TeamPage() {
       if (res.success) {
         toast.success(`Akun staf "${name}" berhasil dibuat`);
         setIsModalOpen(false);
-        setName('');
-        setEmail('');
+        setName("");
+        setEmail("");
         loadMembers();
       } else {
-        toast.error(res.error?.message || 'Gagal menambahkan staf');
+        toast.error(res.error?.message || "Gagal menambahkan staf");
       }
     } finally {
       setIsSubmitting(false);
@@ -93,16 +99,20 @@ export default function TeamPage() {
   };
 
   const handleDeleteMember = async (id: string, mName: string) => {
-    if (!confirm(`Hapus akun staf "${mName}"? Staf tidak akan dapat mengakses portal mitra lagi.`))
+    if (
+      !confirm(
+        `Hapus akun staf "${mName}"? Staf tidak akan dapat mengakses portal mitra lagi.`,
+      )
+    )
       return;
     if (!partner) return;
 
     const res = await api.team.deleteTeamMember(partner.id, id);
     if (res.success) {
-      toast.success('Akun staf berhasil dihapus');
+      toast.success("Akun staf berhasil dihapus");
       loadMembers();
     } else {
-      toast.error(res.error?.message || 'Gagal menghapus');
+      toast.error(res.error?.message || "Gagal menghapus");
     }
   };
 
@@ -110,9 +120,12 @@ export default function TeamPage() {
     return (
       <Card className="p-8 text-center">
         <ShieldAlert className="w-10 h-10 text-rose-500 mx-auto mb-2" />
-        <h3 className="text-sm font-bold text-slate-900 font-heading">Akses Dibatasi</h3>
+        <h3 className="text-sm font-bold text-slate-900 font-heading">
+          Akses Dibatasi
+        </h3>
         <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-          Hanya Pemilik Bisnis (MITRA_OWNER) yang memiliki izin untuk menambah akun dan mengatur hak akses staf operasional.
+          Hanya Pemilik Bisnis (MITRA_OWNER) yang memiliki izin untuk menambah
+          akun dan mengatur hak akses staf operasional.
         </p>
       </Card>
     );
@@ -123,7 +136,7 @@ export default function TeamPage() {
       <PageHeader
         title="Tim & Staf Operasional"
         subtitle="Kelola akun karyawan rental dan atur izin akses modul operasional"
-        breadcrumbs={[{ label: 'Pengelolaan' }, { label: 'Tim & Staff' }]}
+        breadcrumbs={[{ label: "Pengelolaan" }, { label: "Tim & Staff" }]}
         actions={
           <Button
             variant="primary"
@@ -150,30 +163,40 @@ export default function TeamPage() {
                 <div className="flex items-start gap-3">
                   <div
                     className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0 select-none ${
-                      m.role === 'MITRA_OWNER'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-emerald-600 text-white'
+                      m.role === "MITRA_OWNER"
+                        ? "bg-blue-600 text-white"
+                        : "bg-emerald-600 text-white"
                     }`}
                   >
                     {m.name.charAt(0)}
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-[#102447] text-sm font-heading">{m.name}</span>
-                      <Badge variant={m.role === 'MITRA_OWNER' ? 'blue' : 'emerald'} size="sm">
-                        {m.role === 'MITRA_OWNER' ? 'OWNER (FULL)' : 'STAFF OPERASIONAL'}
+                      <span className="font-bold text-[#102447] text-sm font-heading">
+                        {m.name}
+                      </span>
+                      <Badge
+                        variant={m.role === "MITRA_OWNER" ? "blue" : "emerald"}
+                        size="sm"
+                      >
+                        {m.role === "MITRA_OWNER"
+                          ? "OWNER (FULL)"
+                          : "STAFF OPERASIONAL"}
                       </Badge>
                       {m.id === user?.id && (
-                        <span className="text-[10px] text-slate-400 font-semibold">(Anda)</span>
+                        <span className="text-[10px] text-slate-400 font-semibold">
+                          (Anda)
+                        </span>
                       )}
                     </div>
                     <p className="text-xs text-slate-500 mt-0.5">{m.email}</p>
 
                     {/* Permissions summary chips */}
                     <div className="flex flex-wrap items-center gap-1 mt-2">
-                      {m.role === 'MITRA_OWNER' ? (
+                      {m.role === "MITRA_OWNER" ? (
                         <span className="inline-flex items-center gap-1 text-[10px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 font-medium">
-                          <ShieldCheck className="w-3 h-3 text-[#0866F5]" /> Akses Penuh: Keuangan, Tim, Pengaturan, Operasional
+                          <ShieldCheck className="w-3 h-3 text-[#0866F5]" />{" "}
+                          Akses Penuh: Keuangan, Tim, Pengaturan, Operasional
                         </span>
                       ) : (
                         <>
@@ -209,7 +232,7 @@ export default function TeamPage() {
                 </div>
 
                 <div className="flex items-center gap-1.5 shrink-0 sm:self-center">
-                  {m.role !== 'MITRA_OWNER' && (
+                  {m.role !== "MITRA_OWNER" && (
                     <Button
                       variant="outline"
                       size="icon-sm"
@@ -300,10 +323,20 @@ export default function TeamPage() {
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsModalOpen(false)}
+            >
               Batal
             </Button>
-            <Button type="submit" variant="primary" size="sm" isLoading={isSubmitting}>
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              isLoading={isSubmitting}
+            >
               Simpan Akun Staf
             </Button>
           </div>

@@ -1,24 +1,19 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
-import { api } from '@/api';
-import { Booking, BookingStatus, PartnerReadinessStatus } from '@/types';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Tabs } from '@/components/ui/Tabs';
-import { Select } from '@/components/ui/Select';
-import { StatusBadge } from '@/components/ui/StatusBadge';
-import { Card, CardContent } from '@/components/ui/Card';
-import { formatRupiah, formatDateShort, formatPhone } from '@/lib/format';
-import {
-  Search,
-  KeyRound,
-  RotateCcw,
-  Eye,
-} from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { api } from "@/api";
+import { Booking, BookingStatus, PartnerReadinessStatus } from "@/types";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Tabs } from "@/components/ui/Tabs";
+import { Select } from "@/components/ui/Select";
+import { StatusBadge } from "@/components/ui/StatusBadge";
+import { Card, CardContent } from "@/components/ui/Card";
+import { formatRupiah, formatDateShort, formatPhone } from "@/lib/format";
+import { Search, KeyRound, RotateCcw, Eye } from "lucide-react";
 
 export default function BookingsPage() {
   const { partner } = useAuth();
@@ -26,9 +21,9 @@ export default function BookingsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   // Filters
-  const [activeTab, setActiveTab] = useState<string>('semua');
-  const [readinessFilter, setReadinessFilter] = useState<string>('semua');
-  const [search, setSearch] = useState('');
+  const [activeTab, setActiveTab] = useState<string>("semua");
+  const [readinessFilter, setReadinessFilter] = useState<string>("semua");
+  const [search, setSearch] = useState("");
 
   const loadBookings = async () => {
     if (!partner) return;
@@ -36,9 +31,12 @@ export default function BookingsPage() {
     try {
       const res = await api.bookings.getBookings(partner.id, {
         search: search || undefined,
-        status: activeTab === 'semua' ? undefined : (activeTab as BookingStatus),
+        status:
+          activeTab === "semua" ? undefined : (activeTab as BookingStatus),
         readinessStatus:
-          readinessFilter === 'semua' ? undefined : (readinessFilter as PartnerReadinessStatus),
+          readinessFilter === "semua"
+            ? undefined
+            : (readinessFilter as PartnerReadinessStatus),
         limit: 50,
       });
 
@@ -60,11 +58,11 @@ export default function BookingsPage() {
   };
 
   const statusTabs = [
-    { id: 'semua', label: 'Semua Pesanan' },
-    { id: 'diteruskan_mitra', label: 'Diteruskan Mitra' },
-    { id: 'berjalan', label: 'Aktif Berjalan' },
-    { id: 'selesai', label: 'Selesai' },
-    { id: 'dibatalkan', label: 'Dibatalkan' },
+    { id: "semua", label: "Semua Pesanan" },
+    { id: "diteruskan_mitra", label: "Diteruskan Mitra" },
+    { id: "berjalan", label: "Aktif Berjalan" },
+    { id: "selesai", label: "Selesai" },
+    { id: "dibatalkan", label: "Dibatalkan" },
   ];
 
   return (
@@ -72,15 +70,11 @@ export default function BookingsPage() {
       <PageHeader
         title="Daftar Penyewaan Kendaraan"
         subtitle="Kelola pesanan masuk pelanggan, konfirmasi kesiapan unit, dan serah terima"
-        breadcrumbs={[{ label: 'Penyewaan' }]}
+        breadcrumbs={[{ label: "Penyewaan" }]}
       />
 
       {/* Tabs */}
-      <Tabs
-        tabs={statusTabs}
-        activeTab={activeTab}
-        onChange={setActiveTab}
-      />
+      <Tabs tabs={statusTabs} activeTab={activeTab} onChange={setActiveTab} />
 
       {/* Search & Filter Bar */}
       <Card>
@@ -102,10 +96,10 @@ export default function BookingsPage() {
                 value={readinessFilter}
                 onChange={(e) => setReadinessFilter(e.target.value)}
                 options={[
-                  { value: 'semua', label: 'Semua Kesiapan Unit' },
-                  { value: 'pending', label: 'Perlu Cek Kesiapan' },
-                  { value: 'ready', label: 'Unit Dikonfirmasi Siap' },
-                  { value: 'issue_reported', label: 'Ada Kendala Dilaporkan' },
+                  { value: "semua", label: "Semua Kesiapan Unit" },
+                  { value: "pending", label: "Perlu Cek Kesiapan" },
+                  { value: "ready", label: "Unit Dikonfirmasi Siap" },
+                  { value: "issue_reported", label: "Ada Kendala Dilaporkan" },
                 ]}
               />
             </div>
@@ -132,36 +126,61 @@ export default function BookingsPage() {
                 <thead>
                   <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider font-heading">
                     <th className="px-4 py-2.5 sm:px-5 sm:py-3">No. Booking</th>
-                    <th className="px-4 py-2.5 sm:px-5 sm:py-3">Armada Kendaraan</th>
+                    <th className="px-4 py-2.5 sm:px-5 sm:py-3">
+                      Armada Kendaraan
+                    </th>
                     <th className="px-4 py-2.5 sm:px-5 sm:py-3">Pelanggan</th>
-                    <th className="px-4 py-2.5 sm:px-5 sm:py-3">Periode Sewa</th>
+                    <th className="px-4 py-2.5 sm:px-5 sm:py-3">
+                      Periode Sewa
+                    </th>
                     <th className="px-4 py-2.5 sm:px-5 sm:py-3">Total Sewa</th>
                     <th className="px-4 py-2.5 sm:px-5 sm:py-3">Status</th>
                     <th className="px-4 py-2.5 sm:px-5 sm:py-3">Kesiapan</th>
-                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">Aksi</th>
+                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">
+                      Aksi
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-xs">
                   {bookings.map((b) => (
-                    <tr key={b.id} className="hover:bg-slate-50/70 transition-colors">
+                    <tr
+                      key={b.id}
+                      className="hover:bg-slate-50/70 transition-colors"
+                    >
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3 font-semibold text-[#102447] tabular-nums font-heading">
                         {b.bookingNumber}
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3">
-                        <p className="font-semibold text-slate-800 font-heading">{b.vehicle.nama}</p>
+                        <p className="font-semibold text-slate-800 font-heading">
+                          {b.vehicle.nama}
+                        </p>
                         <p className="text-[10px] text-slate-500 mt-0.5">
-                          {b.vehicle.platNomor} • {(b.vehicle.tipe || b.vehicle.jenis || 'mobil').toUpperCase()}
+                          {b.vehicle.platNomor} •{" "}
+                          {(
+                            b.vehicle.tipe ||
+                            b.vehicle.jenis ||
+                            "mobil"
+                          ).toUpperCase()}
                         </p>
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3">
-                        <p className="font-medium text-slate-800">{b.customer.nama}</p>
-                        <p className="text-[10px] text-slate-500 mt-0.5">{formatPhone(b.customer.telepon || b.customer.phone || '')}</p>
+                        <p className="font-medium text-slate-800">
+                          {b.customer.nama}
+                        </p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">
+                          {formatPhone(
+                            b.customer.telepon || b.customer.phone || "",
+                          )}
+                        </p>
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3">
                         <p className="font-medium text-slate-700">
-                          {formatDateShort(b.tanggalMulai)} - {formatDateShort(b.tanggalSelesai)}
+                          {formatDateShort(b.tanggalMulai)} -{" "}
+                          {formatDateShort(b.tanggalSelesai)}
                         </p>
-                        <p className="text-[10px] text-slate-500 mt-0.5">{b.durasiHari} Hari Sewa</p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">
+                          {b.durasiHari} Hari Sewa
+                        </p>
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3 font-bold text-[#0866F5] tabular-nums text-xs font-heading">
                         {formatRupiah(b.rincianBiaya.subtotalSewa)}
@@ -174,21 +193,45 @@ export default function BookingsPage() {
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">
                         <div className="flex items-center justify-end gap-1">
-                          <Link href={`/bookings/${b.id}`} title="Lihat Detail Pesanan">
-                            <Button variant="outline" size="icon-sm" title="Lihat Detail" aria-label="Lihat Detail">
+                          <Link
+                            href={`/bookings/${b.id}`}
+                            title="Lihat Detail Pesanan"
+                          >
+                            <Button
+                              variant="outline"
+                              size="icon-sm"
+                              title="Lihat Detail"
+                              aria-label="Lihat Detail"
+                            >
                               <Eye className="w-3.5 h-3.5 text-slate-600" />
                             </Button>
                           </Link>
-                          {b.status === 'diteruskan_mitra' && (
-                            <Link href={`/handover/${b.id}`} title="Serah Terima Kunci">
-                              <Button variant="soft-blue" size="icon-sm" title="Serah Terima Kunci" aria-label="Serah Terima Kunci">
+                          {b.status === "diteruskan_mitra" && (
+                            <Link
+                              href={`/handover/${b.id}`}
+                              title="Serah Terima Kunci"
+                            >
+                              <Button
+                                variant="soft-blue"
+                                size="icon-sm"
+                                title="Serah Terima Kunci"
+                                aria-label="Serah Terima Kunci"
+                              >
                                 <KeyRound className="w-3.5 h-3.5 text-[#0866F5]" />
                               </Button>
                             </Link>
                           )}
-                          {b.status === 'berjalan' && (
-                            <Link href={`/returns/${b.id}`} title="Inspeksi Pengembalian">
-                              <Button variant="soft-emerald" size="icon-sm" title="Inspeksi Pengembalian" aria-label="Inspeksi Pengembalian">
+                          {b.status === "berjalan" && (
+                            <Link
+                              href={`/returns/${b.id}`}
+                              title="Inspeksi Pengembalian"
+                            >
+                              <Button
+                                variant="soft-emerald"
+                                size="icon-sm"
+                                title="Inspeksi Pengembalian"
+                                aria-label="Inspeksi Pengembalian"
+                              >
                                 <RotateCcw className="w-3.5 h-3.5 text-emerald-600" />
                               </Button>
                             </Link>

@@ -1,18 +1,29 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import { usePermission } from '@/hooks/usePermission';
-import { api } from '@/api';
-import { Reimbursement } from '@/types';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { Button } from '@/components/ui/Button';
-import { StatusBadge } from '@/components/ui/StatusBadge';
-import { StatCard } from '@/components/ui/StatCard';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Modal } from '@/components/ui/Modal';
-import { formatRupiah, formatDateShort, formatDateTimeIndo } from '@/lib/format';
-import { Eye, ShieldAlert, CheckCircle2, Clock, Info, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { usePermission } from "@/hooks/usePermission";
+import { api } from "@/api";
+import { Reimbursement } from "@/types";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Button } from "@/components/ui/Button";
+import { StatusBadge } from "@/components/ui/StatusBadge";
+import { StatCard } from "@/components/ui/StatCard";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import { Modal } from "@/components/ui/Modal";
+import {
+  formatRupiah,
+  formatDateShort,
+  formatDateTimeIndo,
+} from "@/lib/format";
+import {
+  Eye,
+  ShieldAlert,
+  CheckCircle2,
+  Clock,
+  Info,
+  ExternalLink,
+} from "lucide-react";
 
 export default function ReimbursementsPage() {
   const { partner } = useAuth();
@@ -22,7 +33,9 @@ export default function ReimbursementsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   // Modal Proof Preview
-  const [selectedProof, setSelectedProof] = useState<Reimbursement | null>(null);
+  const [selectedProof, setSelectedProof] = useState<Reimbursement | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!partner) return;
@@ -43,20 +56,25 @@ export default function ReimbursementsPage() {
         <div className="w-10 h-10 rounded-xl bg-rose-50 text-[#FF4D4D] flex items-center justify-center mx-auto mb-2 shadow-xs">
           <ShieldAlert className="w-5 h-5" />
         </div>
-        <h3 className="text-sm font-bold text-[#102447] font-heading">Akses Dibatasi</h3>
+        <h3 className="text-sm font-bold text-[#102447] font-heading">
+          Akses Dibatasi
+        </h3>
         <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto leading-relaxed">
-          Hanya Pemilik Bisnis (MITRA_OWNER) yang memiliki izin untuk memantau pencairan dana reimburse.
+          Hanya Pemilik Bisnis (MITRA_OWNER) yang memiliki izin untuk memantau
+          pencairan dana reimburse.
         </p>
       </Card>
     );
   }
 
   const totalMenunggu = reimbursements
-    .filter((r) => r.status === 'belum_dibayar')
+    .filter((r) => r.status === "belum_dibayar")
     .reduce((acc, cur) => acc + cur.nominalBersihMitra, 0);
 
   const totalDicairkan = reimbursements
-    .filter((r) => r.status === 'dibayar' || (r.status as string) === 'sudah_dibayar')
+    .filter(
+      (r) => r.status === "dibayar" || (r.status as string) === "sudah_dibayar",
+    )
     .reduce((acc, cur) => acc + cur.nominalBersihMitra, 0);
 
   return (
@@ -64,7 +82,7 @@ export default function ReimbursementsPage() {
       <PageHeader
         title="Klaim Pencairan Dana (Reimburse Admin)"
         subtitle="Pantau pencairan pendapatan sewa bersih yang ditransfer Admin RentalinAja"
-        breadcrumbs={[{ label: 'Keuangan' }, { label: 'Reimburse' }]}
+        breadcrumbs={[{ label: "Keuangan" }, { label: "Reimburse" }]}
       />
 
       {/* Info Card explaining business rule */}
@@ -77,7 +95,11 @@ export default function ReimbursementsPage() {
             Ketentuan Pencairan Dana Platform (Reimburse):
           </p>
           <p className="text-slate-700 leading-relaxed text-[11px] mt-0.5">
-            Setelah penyewa menyelesaikan pengembalian unit, sistem menerbitkan klaim reimburse. Admin RentalinAja mentransfer nominal bersih (setelah dipotong komisi {partner?.commissionRate || 10}%) ke rekening utama mitra Anda. Bukti transfer resmi diunggah langsung oleh Super Admin platform.
+            Setelah penyewa menyelesaikan pengembalian unit, sistem menerbitkan
+            klaim reimburse. Admin RentalinAja mentransfer nominal bersih
+            (setelah dipotong komisi {partner?.commissionRate || 10}%) ke
+            rekening utama mitra Anda. Bukti transfer resmi diunggah langsung
+            oleh Super Admin platform.
           </p>
         </div>
       </div>
@@ -87,7 +109,7 @@ export default function ReimbursementsPage() {
         <StatCard
           title="Total Menunggu Pencairan"
           value={formatRupiah(totalMenunggu)}
-          subtitle={`${reimbursements.filter((r) => r.status === 'belum_dibayar').length} transaksi dalam proses transfer admin`}
+          subtitle={`${reimbursements.filter((r) => r.status === "belum_dibayar").length} transaksi dalam proses transfer admin`}
           icon={<Clock className="w-4 h-4 text-amber-600" />}
           iconBg="bg-amber-50"
         />
@@ -95,7 +117,7 @@ export default function ReimbursementsPage() {
         <StatCard
           title="Total Telah Dicairkan ke Rekening"
           value={formatRupiah(totalDicairkan)}
-          subtitle={`${reimbursements.filter((r) => r.status === 'dibayar').length} transaksi berhasil dicairkan`}
+          subtitle={`${reimbursements.filter((r) => r.status === "dibayar").length} transaksi berhasil dicairkan`}
           icon={<CheckCircle2 className="w-4 h-4 text-emerald-600" />}
           iconBg="bg-emerald-50"
         />
@@ -130,28 +152,50 @@ export default function ReimbursementsPage() {
                 <thead>
                   <tr className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider font-heading">
                     <th className="px-4 py-2.5 sm:px-5 sm:py-3">No. Booking</th>
-                    <th className="px-4 py-2.5 sm:px-5 sm:py-3">Armada & Pelanggan</th>
-                    <th className="px-4 py-2.5 sm:px-5 sm:py-3">Rekening Penerima</th>
-                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">Tarif Kotor</th>
-                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">Hak Bersih</th>
-                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-center">Status</th>
-                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">Bukti Transfer</th>
+                    <th className="px-4 py-2.5 sm:px-5 sm:py-3">
+                      Armada & Pelanggan
+                    </th>
+                    <th className="px-4 py-2.5 sm:px-5 sm:py-3">
+                      Rekening Penerima
+                    </th>
+                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">
+                      Tarif Kotor
+                    </th>
+                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">
+                      Hak Bersih
+                    </th>
+                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-center">
+                      Status
+                    </th>
+                    <th className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">
+                      Bukti Transfer
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-xs">
                   {reimbursements.map((r) => (
-                    <tr key={r.id} className="hover:bg-slate-50/70 transition-colors">
+                    <tr
+                      key={r.id}
+                      className="hover:bg-slate-50/70 transition-colors"
+                    >
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3 font-semibold text-[#102447] font-heading tabular-nums">
                         #{r.bookingNumber}
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3">
-                        <p className="font-semibold text-slate-800 font-heading">{r.vehicleName}</p>
-                        <p className="text-[10px] text-slate-500 mt-0.5">{r.customerName}</p>
+                        <p className="font-semibold text-slate-800 font-heading">
+                          {r.vehicleName}
+                        </p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">
+                          {r.customerName}
+                        </p>
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3">
-                        <p className="font-semibold text-slate-700">{r.bankTujuan?.bankName}</p>
+                        <p className="font-semibold text-slate-700">
+                          {r.bankTujuan?.bankName}
+                        </p>
                         <p className="text-[10px] text-slate-500 mt-0.5 tabular-nums">
-                          {r.bankTujuan?.accountNumber} a/n {r.bankTujuan?.accountHolder}
+                          {r.bankTujuan?.accountNumber} a/n{" "}
+                          {r.bankTujuan?.accountHolder}
                         </p>
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3 text-right font-medium text-slate-700 tabular-nums">
@@ -175,7 +219,9 @@ export default function ReimbursementsPage() {
                             <Eye className="w-3.5 h-3.5 text-[#0866F5]" />
                           </Button>
                         ) : (
-                          <span className="text-[10px] text-slate-400 italic">Menunggu Admin</span>
+                          <span className="text-[10px] text-slate-400 italic">
+                            Menunggu Admin
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -224,7 +270,11 @@ export default function ReimbursementsPage() {
             )}
 
             <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
-              <Button variant="outline" size="sm" onClick={() => setSelectedProof(null)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSelectedProof(null)}
+              >
                 Tutup
               </Button>
               {selectedProof.buktiTransferUrl && (
@@ -233,7 +283,11 @@ export default function ReimbursementsPage() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <Button variant="primary" size="sm" rightIcon={<ExternalLink className="w-3.5 h-3.5" />}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    rightIcon={<ExternalLink className="w-3.5 h-3.5" />}
+                  >
                     Buka Gambar Asli
                   </Button>
                 </a>
