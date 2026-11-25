@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { formatDateIndo, formatPhone } from '@/lib/format';
-import { KeyRound, ArrowRight } from 'lucide-react';
+import { KeyRound, ArrowRight, Eye } from 'lucide-react';
 
 export default function HandoverListPage() {
   const { partner } = useAuth();
@@ -105,9 +105,9 @@ export default function HandoverListPage() {
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <Link href={`/bookings/${b.id}`}>
-                      <Button variant="outline" size="xs">
-                        Detail
+                    <Link href={`/bookings/${b.id}`} title="Lihat Detail Pesanan">
+                      <Button variant="outline" size="icon-sm" title="Lihat Detail" aria-label="Lihat Detail">
+                        <Eye className="w-3.5 h-3.5 text-slate-600" />
                       </Button>
                     </Link>
                     <Link href={`/handover/${b.id}`}>

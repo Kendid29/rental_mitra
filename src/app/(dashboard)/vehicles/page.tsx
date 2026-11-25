@@ -289,25 +289,26 @@ export default function VehiclesPage() {
                     <span className="font-semibold text-slate-700">{v.totalPenyewaan}x</span> disewa
                   </div>
                   <div className="flex items-center gap-1">
-                    <Link href={`/vehicles/${v.id}`}>
-                      <Button variant="outline" size="xs" leftIcon={<Eye className="w-3 h-3" />}>
-                        Detail
+                    <Link href={`/vehicles/${v.id}`} title="Lihat Detail">
+                      <Button variant="outline" size="icon-sm" title="Lihat Detail" aria-label="Lihat Detail">
+                        <Eye className="w-3.5 h-3.5 text-slate-600" />
                       </Button>
                     </Link>
                     {canManageVehicles && (
                       <>
-                        <Link href={`/vehicles/${v.id}/edit`}>
-                          <Button variant="ghost" size="icon-sm" title="Edit Armada">
+                        <Link href={`/vehicles/${v.id}/edit`} title="Edit Armada">
+                          <Button variant="outline" size="icon-sm" title="Edit Armada" aria-label="Edit Armada">
                             <Edit className="w-3.5 h-3.5 text-slate-600" />
                           </Button>
                         </Link>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="icon-sm"
                           onClick={() => handleDeleteVehicle(v.id, v.nama)}
                           title="Hapus Armada"
+                          aria-label="Hapus Armada"
                         >
-                          <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                          <Trash2 className="w-3.5 h-3.5 text-rose-500 hover:text-rose-600" />
                         </Button>
                       </>
                     )}
@@ -372,17 +373,28 @@ export default function VehiclesPage() {
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">
                         <div className="flex items-center justify-end gap-1">
-                          <Link href={`/vehicles/${v.id}`}>
-                            <Button variant="outline" size="xs">
-                              Detail
+                          <Link href={`/vehicles/${v.id}`} title="Lihat Detail">
+                            <Button variant="outline" size="icon-sm" title="Lihat Detail" aria-label="Lihat Detail">
+                              <Eye className="w-3.5 h-3.5 text-slate-600" />
                             </Button>
                           </Link>
                           {canManageVehicles && (
-                            <Link href={`/vehicles/${v.id}/edit`}>
-                              <Button variant="ghost" size="icon-sm">
-                                <Edit className="w-3.5 h-3.5 text-slate-600" />
+                            <>
+                              <Link href={`/vehicles/${v.id}/edit`} title="Edit Armada">
+                                <Button variant="outline" size="icon-sm" title="Edit Armada" aria-label="Edit Armada">
+                                  <Edit className="w-3.5 h-3.5 text-slate-600" />
+                                </Button>
+                              </Link>
+                              <Button
+                                variant="outline"
+                                size="icon-sm"
+                                onClick={() => handleDeleteVehicle(v.id, v.nama)}
+                                title="Hapus Armada"
+                                aria-label="Hapus Armada"
+                              >
+                                <Trash2 className="w-3.5 h-3.5 text-rose-500 hover:text-rose-600" />
                               </Button>
-                            </Link>
+                            </>
                           )}
                         </div>
                       </td>

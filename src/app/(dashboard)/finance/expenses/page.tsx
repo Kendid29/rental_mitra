@@ -249,12 +249,13 @@ export default function ExpensesPage() {
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="icon-sm"
                           onClick={() => handleDeleteExpense(exp.id, exp.deskripsi)}
                           title="Hapus Catatan"
+                          aria-label="Hapus Catatan"
                         >
-                          <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                          <Trash2 className="w-3.5 h-3.5 text-rose-500 hover:text-rose-600" />
                         </Button>
                       </td>
                     </tr>

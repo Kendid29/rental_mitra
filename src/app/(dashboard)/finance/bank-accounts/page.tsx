@@ -200,12 +200,13 @@ export default function BankAccountsPage() {
                 )}
                 {accounts.length > 1 && (
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon-sm"
                     onClick={() => handleDeleteAccount(acc.id)}
                     title="Hapus Rekening"
+                    aria-label="Hapus Rekening"
                   >
-                    <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                    <Trash2 className="w-3.5 h-3.5 text-rose-500 hover:text-rose-600" />
                   </Button>
                 )}
               </div>

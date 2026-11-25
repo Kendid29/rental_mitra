@@ -18,6 +18,7 @@ import {
   Mail,
   MapPin,
   Save,
+  Eye,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -230,9 +231,9 @@ export default function CustomerDetailPage() {
                       </Badge>
                     </td>
                     <td className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">
-                      <Link href={`/bookings/${b.id}`}>
-                        <Button variant="outline" size="xs">
-                          Detail
+                      <Link href={`/bookings/${b.id}`} title="Lihat Detail Pesanan">
+                        <Button variant="outline" size="icon-sm" title="Lihat Detail" aria-label="Lihat Detail">
+                          <Eye className="w-3.5 h-3.5 text-slate-600" />
                         </Button>
                       </Link>
                     </td>

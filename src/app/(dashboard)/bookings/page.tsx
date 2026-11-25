@@ -17,6 +17,7 @@ import {
   Search,
   KeyRound,
   RotateCcw,
+  Eye,
 } from 'lucide-react';
 
 export default function BookingsPage() {
@@ -173,22 +174,22 @@ export default function BookingsPage() {
                       </td>
                       <td className="px-4 py-2.5 sm:px-5 sm:py-3 text-right">
                         <div className="flex items-center justify-end gap-1">
-                          <Link href={`/bookings/${b.id}`}>
-                            <Button variant="outline" size="xs">
-                              Detail
+                          <Link href={`/bookings/${b.id}`} title="Lihat Detail Pesanan">
+                            <Button variant="outline" size="icon-sm" title="Lihat Detail" aria-label="Lihat Detail">
+                              <Eye className="w-3.5 h-3.5 text-slate-600" />
                             </Button>
                           </Link>
                           {b.status === 'diteruskan_mitra' && (
-                            <Link href={`/handover/${b.id}`}>
-                              <Button variant="soft-blue" size="xs" leftIcon={<KeyRound className="w-3 h-3" />}>
-                                Serah Terima
+                            <Link href={`/handover/${b.id}`} title="Serah Terima Kunci">
+                              <Button variant="soft-blue" size="icon-sm" title="Serah Terima Kunci" aria-label="Serah Terima Kunci">
+                                <KeyRound className="w-3.5 h-3.5 text-[#0866F5]" />
                               </Button>
                             </Link>
                           )}
                           {b.status === 'berjalan' && (
-                            <Link href={`/returns/${b.id}`}>
-                              <Button variant="soft-emerald" size="xs" leftIcon={<RotateCcw className="w-3 h-3" />}>
-                                Pengembalian
+                            <Link href={`/returns/${b.id}`} title="Inspeksi Pengembalian">
+                              <Button variant="soft-emerald" size="icon-sm" title="Inspeksi Pengembalian" aria-label="Inspeksi Pengembalian">
+                                <RotateCcw className="w-3.5 h-3.5 text-emerald-600" />
                               </Button>
                             </Link>
                           )}

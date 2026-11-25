@@ -211,12 +211,13 @@ export default function TeamPage() {
                 <div className="flex items-center gap-1.5 shrink-0 sm:self-center">
                   {m.role !== 'MITRA_OWNER' && (
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="icon-sm"
                       onClick={() => handleDeleteMember(m.id, m.name)}
                       title="Hapus Staf"
+                      aria-label="Hapus Staf"
                     >
-                      <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                      <Trash2 className="w-3.5 h-3.5 text-rose-500 hover:text-rose-600" />
                     </Button>
                   )}
                 </div>
