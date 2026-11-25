@@ -1,0 +1,55 @@
+import { NotificationItem } from '@/types';
+
+export const SEED_NOTIFICATIONS: NotificationItem[] = [
+  // --- Mitra 01: Nusantara Rent ---
+  {
+    id: 'notif-01',
+    partnerId: 'mitra-01',
+    category: 'pesanan',
+    title: 'Pesanan Baru Diteruskan!',
+    message: 'Pesanan #RNT-2026-0004 (Honda Brio Satya) telah diteruskan oleh Admin. Mohon segera periksa kesiapan unit.',
+    link: '/bookings/bk-004',
+    isRead: false,
+    createdAt: '2026-11-19T09:00:00Z',
+  },
+  {
+    id: 'notif-02',
+    partnerId: 'mitra-01',
+    category: 'serah_terima',
+    title: 'Pengingat Serah Terima Hari Ini',
+    message: 'Serah terima Toyota Avanza (#RNT-2026-0002) dengan Dimas Prasetyo telah selesai dilakukan.',
+    link: '/handover',
+    isRead: false,
+    createdAt: '2026-11-18T10:15:00Z',
+  },
+  {
+    id: 'notif-03',
+    partnerId: 'mitra-01',
+    category: 'reimburse',
+    title: 'Reimburse Telah Ditransfer Rp 1.890.000',
+    message: 'Admin telah menyelesaikan pembayaran klaim sewa Innova Zenix (#RNT-2026-0001) ke rekening BCA Anda.',
+    link: '/finance/reimbursements',
+    isRead: true,
+    createdAt: '2026-11-16T14:35:00Z',
+  },
+  {
+    id: 'notif-04',
+    partnerId: 'mitra-01',
+    category: 'maintenance',
+    title: 'Pengingat Perawatan Armada',
+    message: 'Pajero Sport (AB 1100 ZZZ) sedang dalam proses servis di Bengkel Resmi Mitsubishi. Estimasi selesai besok.',
+    link: '/maintenance',
+    isRead: true,
+    createdAt: '2026-11-18T08:35:00Z',
+  },
+  {
+    id: 'notif-05',
+    partnerId: 'mitra-01',
+    category: 'pengembalian',
+    title: 'Jadwal Pengembalian Besok',
+    message: 'Toyota Avanza (#RNT-2026-0002) dijadwalkan kembali besok 20 Nov jam 10:00 WIB di Bandara YIA.',
+    link: '/returns',
+    isRead: false,
+    createdAt: '2026-11-19T07:00:00Z',
+  },
+];

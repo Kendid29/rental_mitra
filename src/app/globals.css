@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-headline: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Brand Colors */
+  --color-primary: #102447;
+  --color-primary-dark: #000F2B;
+  --color-primary-light: #1A3A70;
+  
+  --color-secondary: #0866F5;
+  --color-secondary-hover: #0756D1;
+  --color-secondary-light: #EBF3FF;
+
+  --color-tertiary: #00C48C;
+  --color-tertiary-dark: #00875A;
+  --color-tertiary-light: #E6FBF4;
+
+  --color-warning: #FFB800;
+  --color-warning-light: #FFF9E6;
+
+  --color-danger: #FF4D4D;
+  --color-danger-light: #FFEBEB;
+
+  --color-canvas: #F8FAFC;
+  --color-card: #FFFFFF;
+  --color-border: #E2E8F0;
+  
+  --color-text-main: #191C1E;
+  --color-text-muted: #64748B;
+  --color-text-subtle: #94A3B8;
+
+  /* Standard Compact Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(16, 36, 71, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(16, 36, 71, 0.05), 0 1px 2px -1px rgba(16, 36, 71, 0.03);
+  --shadow-md: 0 4px 12px -2px rgba(16, 36, 71, 0.06), 0 2px 4px -2px rgba(16, 36, 71, 0.03);
+  --shadow-lg: 0 12px 28px -4px rgba(16, 36, 71, 0.08), 0 4px 8px -4px rgba(16, 36, 71, 0.03);
+}
+
+:root {
+  --background: #F8FAFC;
+  --foreground: #191C1E;
+  --card: #FFFFFF;
+  --card-foreground: #191C1E;
+  --popover: #FFFFFF;
+  --popover-foreground: #191C1E;
+  --primary: #102447;
+  --primary-foreground: #FFFFFF;
+  --secondary: #0866F5;
+  --secondary-foreground: #FFFFFF;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --accent: #EBF3FF;
+  --accent-foreground: #0866F5;
+  --destructive: #FF4D4D;
+  --destructive-foreground: #FFFFFF;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #0866F5;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-canvas);
+  color: var(--color-text-main);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Tabular figures for numbers, money, and dates */
+.tnum, .tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scrollbar refinement */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
