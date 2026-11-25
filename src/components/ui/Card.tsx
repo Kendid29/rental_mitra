@@ -10,7 +10,7 @@ export function Card({
   return (
     <div
       className={cn(
-        'bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden transition-all duration-150',
+        'bg-white rounded-xl border border-slate-200/80 shadow-xs transition-all duration-150',
         hover && 'hover:border-slate-300 hover:shadow-sm',
         className
       )}

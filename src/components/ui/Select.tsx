@@ -132,7 +132,10 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     };
 
     return (
-      <div className="w-full" ref={containerRef}>
+      <div
+        className={cn('w-full relative', isOpen ? 'z-30' : 'z-auto')}
+        ref={containerRef}
+      >
         {label && (
           <label
             htmlFor={generatedId}

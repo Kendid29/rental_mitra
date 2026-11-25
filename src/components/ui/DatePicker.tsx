@@ -277,7 +277,10 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
     };
 
     return (
-      <div className="w-full relative" ref={containerRef}>
+      <div
+        className={cn('w-full relative', isOpen ? 'z-30' : 'z-auto')}
+        ref={containerRef}
+      >
         {label && (
           <label
             htmlFor={generatedId}
