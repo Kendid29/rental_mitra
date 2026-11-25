@@ -9,6 +9,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Select } from "@/components/ui/Select";
+import { DatePicker } from "@/components/ui/DatePicker";
 import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { formatDateShort } from "@/lib/format";
@@ -150,16 +151,14 @@ export default function AvailabilityPage() {
             <Select
               value={selectedVehicleId}
               onChange={(e) => setSelectedVehicleId(e.target.value)}
-            >
-              <option value="semua">
-                Semua Unit Armada ({vehicles.length})
-              </option>
-              {vehicles.map((v) => (
-                <option key={v.id} value={v.id}>
-                  {v.nama} ({v.platNomor})
-                </option>
-              ))}
-            </Select>
+              options={[
+                { value: 'semua', label: `Semua Unit Armada (${vehicles.length})` },
+                ...vehicles.map((v) => ({
+                  value: v.id,
+                  label: `${v.nama} (${v.platNomor})`,
+                })),
+              ]}
+            />
           </div>
         </CardContent>
       </Card>
@@ -354,18 +353,17 @@ export default function AvailabilityPage() {
           </Select>
 
           <div className="grid grid-cols-2 gap-3">
-            <Input
+            <DatePicker
               label="Tanggal Mulai"
-              type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               required
             />
-            <Input
+            <DatePicker
               label="Tanggal Selesai"
-              type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
+              min={startDate}
               required
             />
           </div>

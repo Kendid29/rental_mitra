@@ -9,6 +9,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
+import { DatePicker } from '@/components/ui/DatePicker';
 import { Textarea } from '@/components/ui/Textarea';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Wrench, ArrowLeft, Check } from 'lucide-react';
@@ -179,19 +180,18 @@ export default function NewMaintenancePage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Input
+              <DatePicker
                 label="Tanggal Masuk Bengkel"
-                type="date"
                 value={tanggalMulai}
                 onChange={(e) => setTanggalMulai(e.target.value)}
                 required
               />
 
-              <Input
+              <DatePicker
                 label="Estimasi Unit Selesai"
-                type="date"
                 value={estimasiSelesai}
                 onChange={(e) => setEstimasiSelesai(e.target.value)}
+                min={tanggalMulai}
                 required
                 helperText="Tanggal ketersediaan unit di kalender akan diblokir"
               />

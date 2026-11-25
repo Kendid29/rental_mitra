@@ -13,6 +13,7 @@ import { StatCard } from "@/components/ui/StatCard";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
+import { DatePicker } from "@/components/ui/DatePicker";
 import { Textarea } from "@/components/ui/Textarea";
 import { formatRupiah, formatDateShort } from "@/lib/format";
 import { Receipt, Plus, Trash2, ShieldAlert } from "lucide-react";
@@ -320,9 +321,8 @@ export default function ExpensesPage() {
               ]}
               required
             />
-            <Input
+            <DatePicker
               label="Tanggal Transaksi"
-              type="date"
               value={tanggal}
               onChange={(e) => setTanggal(e.target.value)}
               required
